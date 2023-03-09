@@ -353,8 +353,13 @@ void OSGRenderer::mouseMoveEvent(QMouseEvent* event)
 void OSGRenderer::wheelEvent(QWheelEvent* event)
 {
     setKeyboardModifiers(event);
+#if QT_VERSION >= QT_VERSION_CHECK(6,0,0)
     m_osgWinEmb->getEventQueue()->mouseMotion(event->position().x() * m_windowScale,
                                               event->position().y() * m_windowScale);
+#else
+    m_osgWinEmb->getEventQueue()->mouseMotion(event->x() * m_windowScale,
+                                              event->y() * m_windowScale);
+#endif
     m_osgWinEmb->getEventQueue()->mouseScroll(
         event->angleDelta().y() > 0 ? osgGA::GUIEventAdapter::SCROLL_UP : ( // Scroll Up
         event->angleDelta().y() < 0 ? osgGA::GUIEventAdapter::SCROLL_DOWN : ( // Scroll Down
